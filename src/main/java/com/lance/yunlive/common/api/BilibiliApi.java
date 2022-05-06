@@ -8,15 +8,18 @@ import com.lance.yunlive.common.enums.Platform;
 import com.lance.yunlive.common.utils.HttpUtil;
 import com.lance.yunlive.domain.LiveRoom;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
 
 @Slf4j
-public class BilibiliApi extends ApiClient {
+@Service
+public class BilibiliApi implements ApiClient {
 
-    public static BilibiliApi getInstance() {
-        return BilibiliApiHolder.INSTANCE;
+    @Override
+    public Platform getPlatform() {
+        return Platform.BILIBILI;
     }
 
     /**
@@ -60,9 +63,5 @@ public class BilibiliApi extends ApiClient {
 
     public LiveRoom getSingleRoomInfo(String roomId) {
         return new LiveRoom();
-    }
-
-    private static class BilibiliApiHolder {
-        private static final BilibiliApi INSTANCE = new BilibiliApi();
     }
 }

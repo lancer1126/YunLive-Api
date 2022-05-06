@@ -1,7 +1,8 @@
 package com.lance.yunlive.service.impl;
 
 import com.lance.yunlive.common.api.ApiClient;
-import com.lance.yunlive.common.api.BilibiliApi;
+import com.lance.yunlive.common.enums.Platform;
+import com.lance.yunlive.config.ApiClientFactory;
 import com.lance.yunlive.domain.LiveRoom;
 import com.lance.yunlive.service.PlatformService;
 import lombok.extern.slf4j.Slf4j;
@@ -9,6 +10,7 @@ import org.springframework.scheduling.annotation.Async;
 import org.springframework.scheduling.annotation.AsyncResult;
 import org.springframework.stereotype.Service;
 
+import javax.annotation.Resource;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.Future;
@@ -16,6 +18,9 @@ import java.util.concurrent.Future;
 @Service
 @Slf4j
 public class PlatformServiceImpl implements PlatformService {
+
+    @Resource
+    ApiClientFactory apiClientFactory;
 
     @Override
     @Async("taskExecutor")
@@ -34,12 +39,25 @@ public class PlatformServiceImpl implements PlatformService {
     }
 
     public ApiClient checkClient(String platform) {
-        ApiClient apiClient = null;
+        Platform platformEnum = null;
         switch (platform) {
             case "bilibili":
-                apiClient = BilibiliApi.getInstance();
+                platformEnum =Platform.BILIBILI;
+                break;
+            case "douyu":
+                platformEnum =Platform.DOUYU;
+                break;
+            case "huya":
+                platformEnum =Platform.HUYA;
+                break;
+            case "cc":
+                platformEnum =Platform.CC;
+                break;
+            case "egame":
+                platformEnum =Platform.EGAME;
                 break;
         }
-        return apiClient;
+        if (platformEnum == null) return null;
+        return apiClientFactory.getApiType(platformEnum);
     }
 }
