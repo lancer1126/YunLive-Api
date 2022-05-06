@@ -5,5 +5,14 @@ spring:
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
     url: jdbc:mysql://localhost:3306/yun_live?serverTimezone=UTC&allowMultiQueries=true&characterEncoding=utf-8&useSSL=false&allowPublicKeyRetrieval=True&allowMultiQueries=true
-    username: xxxx
+    username: root
     password: xxxx
+
+async:
+  executor:
+    thread:
+      core_pool_size: 5
+      max_pool_size: 30
+      queue_capacity: 100
+      keep_alive_sec: 30
+      name_prefix: live-thread-
