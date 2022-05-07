@@ -22,13 +22,13 @@ public class LiveRoomServiceImpl implements LiveRoomService {
     PlatformService platformService;
 
     @Override
-    public List<LiveRoom> getRecommendContent(int page, int size) {
+    public List<LiveRoom> getRecommend(int page, int size) {
         List<LiveRoom> recList = Collections.synchronizedList(new ArrayList<>());
         List<Platform> platformList = new ArrayList<>(Arrays.asList(Platform.values()));
 
         for (Platform platform : platformList) {
             try {
-                Future<List<LiveRoom>> futureRes = platformService.getRecByContentAsync(platform.name, page, size);
+                Future<List<LiveRoom>> futureRes = platformService.getRecByPlatformAsync(platform.name, page, size);
                 if (futureRes.get() != null) {
                     recList.addAll(futureRes.get());
                 } else {
@@ -42,7 +42,7 @@ public class LiveRoomServiceImpl implements LiveRoomService {
     }
 
     public List<LiveRoom> getRecommendByPlatform(String platform, int page, int size) {
-        return null;
+        return platformService.getRec(platform, page, size);
     }
 
 }

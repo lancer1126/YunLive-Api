@@ -10,7 +10,7 @@ import org.apache.http.util.EntityUtils;
 
 import java.io.IOException;
 
-public class HttpUtil {
+public class HttpClientUtil {
 
     public static String doGet(String url) {
         try {

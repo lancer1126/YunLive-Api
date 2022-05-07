@@ -10,10 +10,10 @@ public interface PlatformService {
     /**
      * 异步获取平台推荐内容
      */
-    Future<List<LiveRoom>> getRecByContentAsync(String platform, int page, int size);
+    Future<List<LiveRoom>> getRecByPlatformAsync(String platform, int page, int size);
 
     /**
      * 获取平台推荐内容
      */
-    List<LiveRoom> getRecContent(String platform, int page, int size);
+    List<LiveRoom> getRec(String platform, int page, int size);
 }
