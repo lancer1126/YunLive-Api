@@ -101,6 +101,6 @@ public class BilibiliApiService implements ApiClient {
         } catch (Exception e) {
             log.error("BILIBILI---获取直播间信息异常---roomId：" + roomId + "\n" + e);
         }
-        return new LiveRoom();
+        return liveRoom;
     }
 }
