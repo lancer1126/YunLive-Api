@@ -7,13 +7,12 @@ import com.lance.yunlive.domain.LiveRoom;
 import com.lance.yunlive.service.PlatformService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.scheduling.annotation.Async;
-import org.springframework.scheduling.annotation.AsyncResult;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.Future;
+import java.util.concurrent.CompletableFuture;
 
 @Service
 @Slf4j
@@ -24,9 +23,16 @@ public class PlatformServiceImpl implements PlatformService {
 
     @Override
     @Async("taskExecutor")
-    public Future<List<LiveRoom>> getRecByPlatformAsync(String platform, int page, int size) {
+    public CompletableFuture<List<LiveRoom>> getRecByPlatformAsync(String platform, int page, int size) {
         log.info("平台：" + platform + " 开始异步获取平台推荐内容");
-        return new AsyncResult<>(getRecByPlatform(platform, page, size));
+        List<LiveRoom> recs = new ArrayList<>();
+        try {
+            recs = getRecByPlatform(platform, page, size);
+        } catch (Exception e) {
+            log.warn("平台：" + platform + "请求接口出错");
+        }
+        log.info("平台：" + platform + " 获取到 " + recs.size() + "条数据");
+        return CompletableFuture.completedFuture(recs);
     }
 
     @Override
@@ -42,19 +48,19 @@ public class PlatformServiceImpl implements PlatformService {
         Platform platformEnum = null;
         switch (platform) {
             case "bilibili":
-                platformEnum =Platform.BILIBILI;
+                platformEnum = Platform.BILIBILI;
                 break;
             case "douyu":
-                platformEnum =Platform.DOUYU;
+                platformEnum = Platform.DOUYU;
                 break;
             case "huya":
-                platformEnum =Platform.HUYA;
+                platformEnum = Platform.HUYA;
                 break;
             case "cc":
-                platformEnum =Platform.CC;
+                platformEnum = Platform.CC;
                 break;
             case "egame":
-                platformEnum =Platform.EGAME;
+                platformEnum = Platform.EGAME;
                 break;
         }
         if (platformEnum == null) return null;

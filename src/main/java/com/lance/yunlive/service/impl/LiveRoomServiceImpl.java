@@ -11,8 +11,8 @@ import javax.annotation.Resource;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.concurrent.CopyOnWriteArrayList;
-import java.util.concurrent.Future;
+import java.util.concurrent.CompletableFuture;
+import java.util.stream.Collectors;
 
 @Service
 @Slf4j
@@ -23,29 +23,24 @@ public class LiveRoomServiceImpl implements LiveRoomService {
 
     @Override
     public List<LiveRoom> getRecommend(int page, int size) {
-        List<LiveRoom> recList = new CopyOnWriteArrayList<>();
+        List<LiveRoom> recList = new ArrayList<>();
         List<Platform> platformList = new ArrayList<>(Arrays.asList(Platform.values()));
-        List<Future<List<LiveRoom>>> futureResList = new CopyOnWriteArrayList<>();
 
-        for (Platform platform : platformList) {
+        // 调用异步方法获取推荐内容
+        List<CompletableFuture<List<LiveRoom>>> futures = platformList.stream()
+                .map(p -> platformService.getRecByPlatformAsync(p.name, page, size))
+                .collect(Collectors.toList());
+        // 等待线程执行完毕
+        CompletableFuture.allOf(futures.toArray(new CompletableFuture[0])).join();
+
+        // 获取内容
+        for (CompletableFuture<List<LiveRoom>> res : futures) {
             try {
-                Future<List<LiveRoom>> futureRes = platformService.getRecByPlatformAsync(platform.name, page, size);
-                if (futureRes.get() != null) {
-                    futureResList.add(futureRes);
-                    log.info("平台：" + platform.name + " 获取到 " + futureRes.get().size() + "条数据");
-                } else {
-                    log.warn("平台：" + platform.name + " 内容为空");
+                if (res.get() != null) {
+                    recList.addAll(res.get());
                 }
             } catch (Exception e) {
-                log.error("获取平台推荐内容错误，平台：" + platform.name);
-            }
-        }
-
-        for (Future<List<LiveRoom>> res : futureResList) {
-            try {
-                recList.addAll(res.get());
-            } catch (Exception e) {
-                log.error("读取异步推荐内容错误");
+                log.error("读取异步推荐内容出错");
             }
         }
         log.info("=================================================");
