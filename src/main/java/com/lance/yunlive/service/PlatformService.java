@@ -15,5 +15,5 @@ public interface PlatformService {
     /**
      * 获取平台推荐内容
      */
-    List<LiveRoom> getRec(String platform, int page, int size);
+    List<LiveRoom> getRecByPlatform(String platform, int page, int size);
 }

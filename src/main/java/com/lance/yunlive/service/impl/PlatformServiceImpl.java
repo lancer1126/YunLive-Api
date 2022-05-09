@@ -25,12 +25,12 @@ public class PlatformServiceImpl implements PlatformService {
     @Override
     @Async("taskExecutor")
     public Future<List<LiveRoom>> getRecByPlatformAsync(String platform, int page, int size) {
-        log.info("开始异步获取平台推荐内容，平台：" + platform);
-        return new AsyncResult<>(getRec(platform, page, size));
+        log.info("平台：" + platform + " 开始异步获取平台推荐内容");
+        return new AsyncResult<>(getRecByPlatform(platform, page, size));
     }
 
     @Override
-    public List<LiveRoom> getRec(String platform, int page, int size) {
+    public List<LiveRoom> getRecByPlatform(String platform, int page, int size) {
         ApiClient apiClient = checkClient(platform);
         if (apiClient == null) {
             return new ArrayList<>();
