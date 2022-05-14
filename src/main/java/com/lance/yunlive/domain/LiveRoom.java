@@ -4,7 +4,7 @@ import lombok.Data;
 
 @Data
 public class LiveRoom {
-    private String platForm;
+    private String platform;
     private String roomId;
     private String categoryId;
     private String categoryName;

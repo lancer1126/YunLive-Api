@@ -57,10 +57,10 @@ public class BilibiliApiService implements ApiClient {
             JSONObject itemObj = (JSONObject) item;
 
             LiveRoom liveRoom = new LiveRoom();
-            liveRoom.setPlatForm(getPlatformName());
+            liveRoom.setPlatform(getPlatformName());
             liveRoom.setRoomId(itemObj.getString("roomid"));
             liveRoom.setCategoryId(itemObj.getString("area"));
-            liveRoom.setCategoryName(getSingleRoomInfo(itemObj.getString("roomid")).getCategoryName());
+//            liveRoom.setCategoryName(getSingleRoomInfo(itemObj.getString("roomid")).getCategoryName());
             liveRoom.setRoomName(itemObj.getString("title"));
             liveRoom.setOwnerName(itemObj.getString("uname"));
             liveRoom.setRoomPic(itemObj.getString("system_cover"));
@@ -88,7 +88,7 @@ public class BilibiliApiService implements ApiClient {
             JSONObject roomInfo = dataObj.getJSONObject("room_info");
             JSONObject baseInfo = dataObj.getJSONObject("anchor_info").getJSONObject("base_info");
 
-            liveRoom.setPlatForm(getPlatformName());
+            liveRoom.setPlatform(getPlatformName());
             liveRoom.setRoomId(roomInfo.getString("room_id"));
             liveRoom.setCategoryId(roomInfo.getInteger("area_id").toString());
             liveRoom.setCategoryName(roomInfo.getString("area_name"));

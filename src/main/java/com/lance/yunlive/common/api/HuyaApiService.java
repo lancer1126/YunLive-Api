@@ -26,17 +26,23 @@ public class HuyaApiService implements ApiClient {
 
     @Override
     public List<LiveRoom> getRecommend(int page, int size) {
-        List<LiveRoom> liveRoomList = new ArrayList<>();
-        String url = String.format(ApiUrl.Huya.RECOMMEND, page);
+        int realPage = page / 6 + 1;
+        int start = (page - 1) * size % 120;
+        if (size == 10) {
+            realPage = page / 12 + 1;
+            start = (page - 1) * size % 120;
+        }
 
+        List<LiveRoom> liveRoomList = new ArrayList<>();
+        String url = String.format(ApiUrl.Huya.RECOMMEND, realPage);
         String content = HttpUtil.get(url);
         JSONObject jsonObject = JSON.parseObject(content);
         if (jsonObject.getInteger("status").equals(200)) {
             JSONArray dataList = jsonObject.getJSONObject("data").getJSONArray("datas");
-            for (Object obj : dataList) {
-                JSONObject item = (JSONObject) obj;
+            for (int i = start; i < start + size; i++) {
+                JSONObject item = dataList.getJSONObject(i);
                 LiveRoom liveRoom = new LiveRoom();
-                liveRoom.setPlatForm(Platform.HUYA.name);
+                liveRoom.setPlatform(Platform.HUYA.name);
                 liveRoom.setRoomId(item.getString("profileRoom"));
                 liveRoom.setCategoryId(item.getString("gid"));
                 liveRoom.setCategoryName(item.getString("gameFullName"));
