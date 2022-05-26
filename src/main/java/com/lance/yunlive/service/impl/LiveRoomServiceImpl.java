@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 import javax.annotation.Resource;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
 import java.util.stream.Collectors;
@@ -45,6 +46,7 @@ public class LiveRoomServiceImpl implements LiveRoomService {
             }
         }
         log.info("=================================================");
+        Collections.shuffle(recList);
         return recList;
     }
 

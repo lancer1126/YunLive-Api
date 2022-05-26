@@ -21,16 +21,14 @@ public class LiveRoomController {
     @GetMapping("/rec")
     public ResultEntity getRecommendContent(@RequestParam(value = "page", defaultValue = "1") int page,
                                             @RequestParam(value = "size", defaultValue = "10") int size) {
-        List<LiveRoom> recommendContent = liveRoomService.getRecommend(page, size);
-        return ResultEntity.success(recommendContent);
+        return ResultEntity.success(liveRoomService.getRecommend(page, size));
     }
 
     @GetMapping("/recByPlatform")
     public ResultEntity getRecByPlatform(@RequestParam("pl") String platform,
                                          @RequestParam(value = "page", defaultValue = "1") int page,
                                          @RequestParam(value = "size", defaultValue = "10") int size) {
-        List<LiveRoom> liveRoomList = liveRoomService.getRecommendByPlatform(platform, page, size);
-        return ResultEntity.success(liveRoomList);
+        return ResultEntity.success(liveRoomService.getRecommendByPlatform(platform, page, size));
     }
 
     @GetMapping("/roomInfo")
