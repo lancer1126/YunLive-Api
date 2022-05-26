@@ -3,7 +3,9 @@ package com.lance.yunlive.service.impl;
 import com.lance.yunlive.common.api.ApiClient;
 import com.lance.yunlive.common.enums.Platform;
 import com.lance.yunlive.config.ApiClientFactory;
+import com.lance.yunlive.domain.LiveQuality;
 import com.lance.yunlive.domain.LiveRoom;
+import com.lance.yunlive.mapper.LiveRoomMapper;
 import com.lance.yunlive.service.PlatformService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.scheduling.annotation.Async;
@@ -20,6 +22,8 @@ public class PlatformServiceImpl implements PlatformService {
 
     @Resource
     ApiClientFactory apiClientFactory;
+    @Resource
+    LiveRoomMapper liveRoomMapper;
 
     @Override
     @Async("taskExecutor")
@@ -42,6 +46,28 @@ public class PlatformServiceImpl implements PlatformService {
             return new ArrayList<>();
         }
         return apiClient.getRecommend(page, size);
+    }
+
+    @Override
+    public LiveRoom getRoomInfo(String uid, String platform, String roomId) {
+        ApiClient apiClient = checkClient(platform);
+        if (apiClient == null) {
+            return null;
+        }
+
+        LiveRoom roomInfo = apiClient.getSingleRoomInfo(roomId);
+        roomInfo.setIsFollowed(liveRoomMapper.checkFollowed(uid, platform, roomId));
+        return roomInfo;
+    }
+
+    @Override
+    public LiveQuality getRealUrl(String platform, String roomId) {
+        LiveQuality quality = new LiveQuality();
+        ApiClient apiClient = checkClient(platform);
+        if (apiClient != null) {
+            quality = apiClient.getRealUrl(roomId);
+        }
+        return quality;
     }
 
     public ApiClient checkClient(String platform) {

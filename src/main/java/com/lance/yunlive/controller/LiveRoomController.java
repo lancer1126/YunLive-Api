@@ -33,4 +33,20 @@ public class LiveRoomController {
         return ResultEntity.success(liveRoomList);
     }
 
+    @GetMapping("/roomInfo")
+    public ResultEntity getRoomInfo(@RequestParam("uid") String uid,
+                                    @RequestParam("p") String platform,
+                                    @RequestParam("rid") String roomId) {
+        LiveRoom roomInfo = liveRoomService.getRoomInfo(uid, platform, roomId);
+        if (roomInfo == null) {
+            return ResultEntity.fail("获取房间信息失败");
+        }
+        return ResultEntity.success(roomInfo);
+    }
+
+    @GetMapping("/realUrl")
+    public ResultEntity getRealUrl(@RequestParam("p") String platform,
+                                   @RequestParam("rid") String roomId) {
+        return ResultEntity.success(liveRoomService.getRealUrl(platform, roomId));
+    }
 }

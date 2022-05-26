@@ -1,6 +1,7 @@
 package com.lance.yunlive.common.api;
 
 import com.lance.yunlive.common.enums.Platform;
+import com.lance.yunlive.domain.LiveQuality;
 import com.lance.yunlive.domain.LiveRoom;
 
 import java.util.List;
@@ -27,4 +28,9 @@ public interface ApiClient {
      * 根据roomId获取单个房间信息
      */
     LiveRoom getSingleRoomInfo(String roomId);
+
+    /**
+     * 根据roomId获取直播间每个画质的真是地址
+     */
+    LiveQuality getRealUrl(String roomId);
 }

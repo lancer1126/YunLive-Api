@@ -1,6 +1,7 @@
 package com.lance.yunlive.service.impl;
 
 import com.lance.yunlive.common.enums.Platform;
+import com.lance.yunlive.domain.LiveQuality;
 import com.lance.yunlive.domain.LiveRoom;
 import com.lance.yunlive.service.LiveRoomService;
 import com.lance.yunlive.service.PlatformService;
@@ -51,4 +52,13 @@ public class LiveRoomServiceImpl implements LiveRoomService {
         return platformService.getRecByPlatform(platform, page, size);
     }
 
+    @Override
+    public LiveRoom getRoomInfo(String uid, String platform, String roomId) {
+        return platformService.getRoomInfo(uid, platform, roomId);
+    }
+
+    @Override
+    public LiveQuality getRealUrl(String platform, String roomId) {
+        return platformService.getRealUrl(platform, roomId);
+    }
 }

@@ -6,6 +6,7 @@ import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.lance.yunlive.common.constrants.ApiUrl;
 import com.lance.yunlive.common.enums.Platform;
+import com.lance.yunlive.domain.LiveQuality;
 import com.lance.yunlive.domain.LiveRoom;
 import org.springframework.stereotype.Service;
 
@@ -60,6 +61,11 @@ public class HuyaApiService implements ApiClient {
 
     @Override
     public LiveRoom getSingleRoomInfo(String roomId) {
+        return null;
+    }
+
+    @Override
+    public LiveQuality getRealUrl(String roomId) {
         return null;
     }
 }

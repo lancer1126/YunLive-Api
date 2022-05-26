@@ -9,12 +9,15 @@ import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.lance.yunlive.common.constrants.ApiUrl;
 import com.lance.yunlive.common.constrants.HttpInfo;
+import com.lance.yunlive.common.enums.BiliQuality;
 import com.lance.yunlive.common.enums.Platform;
+import com.lance.yunlive.domain.LiveQuality;
 import com.lance.yunlive.domain.LiveRoom;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 @Slf4j
@@ -103,4 +106,88 @@ public class BilibiliApiService implements ApiClient {
         }
         return liveRoom;
     }
+
+    @Override
+    public LiveQuality getRealUrl(String roomId) {
+        LiveQuality liveQuality = new LiveQuality();
+        // 获取当前直播间的状态与真实播放地址
+        JSONObject roomInfo = getRealRid(roomId);
+        if (roomInfo == null) {
+            liveQuality.setStatus("noeExist");
+            return liveQuality;
+        }
+        Boolean liveStatus = roomInfo.getBoolean("live_status");
+        if (liveStatus == null || !liveStatus) {
+            liveQuality.setStatus("offline");
+        } else {
+            liveQuality.setStatus("live");
+        }
+
+        String realId = roomInfo.getString("room_id");
+        List<BiliQuality> qualityList = new ArrayList<>(Arrays.asList(BiliQuality.values()));
+        // 获取所有画质下真实的播放地址
+        for (BiliQuality quality : qualityList) {
+            String playUrl = getPlayUrl(realId, quality.rate);
+            switch (quality) {
+                case FD:
+                    liveQuality.setFd(playUrl);
+                    break;
+                case HD:
+                    liveQuality.setHd(playUrl);
+                    break;
+                case LD:
+                    liveQuality.setLd(playUrl);
+                    break;
+                case SD:
+                    liveQuality.setSd(playUrl);
+                    break;
+                case OD:
+                    liveQuality.setOd(playUrl);
+                    break;
+            }
+        }
+        return liveQuality;
+    }
+
+    public JSONObject getRealRid(String rid) {
+        String url = String.format(ApiUrl.Bilibili.ROOM_INIT, rid);
+        String content = HttpRequest.get(url)
+                .header(Header.USER_AGENT, HttpInfo.USER_AGENT)
+                .execute().body();
+
+        JSONObject resp = JSON.parseObject(content);
+        Integer code = resp.getInteger("code");
+        if (code != 0) {
+            log.error("Bilibili获取直播间真实地址错误, roomId: " + rid);
+            return null;
+        }
+
+        JSONObject data = resp.getJSONObject("data");
+        JSONObject obj = new JSONObject();
+        obj.put("live_status", data.getBoolean("live_status"));
+        obj.put("room_id", data.getString("room_id"));
+        return obj;
+    }
+
+    /**
+     * 获取真实的播放地址
+     * @param roomId    房间Id
+     * @param qn        画质选项
+     * @return          地址
+     */
+    private String getPlayUrl(String roomId, String qn) {
+        String url = String.format(ApiUrl.Bilibili.PLAY_URL, roomId, qn);
+        String content = HttpRequest.get(url)
+                .header(Header.USER_AGENT, HttpInfo.USER_AGENT)
+                .execute().body();
+
+        JSONArray durlArr = JSON.parseObject(content).getJSONObject("data").getJSONArray("durl");
+        if (!durlArr.isEmpty()) {
+            return durlArr.getJSONObject(0).getString("url");
+        } else {
+            log.error("Bilibili---获取真实地址异常---roomId：" + roomId);
+            return "获取失败";
+        }
+    }
+
 }

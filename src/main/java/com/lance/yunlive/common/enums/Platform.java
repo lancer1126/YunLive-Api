@@ -7,7 +7,7 @@ public enum Platform {
     CC("cc"),
     EGAME("egame");
 
-    public String name;
+    public final String name;
     Platform(String name){
         this.name = name;
     }
