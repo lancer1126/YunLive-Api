@@ -10,6 +10,7 @@ import com.lance.yunlive.common.enums.Platform;
 import com.lance.yunlive.common.utils.CommonUtil;
 import com.lance.yunlive.domain.LiveQuality;
 import com.lance.yunlive.domain.LiveRoom;
+import com.lance.yunlive.domain.Streamer;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
@@ -71,6 +72,11 @@ public class DouyuApiService implements ApiClient {
 
     @Override
     public LiveQuality getRealUrl(String roomId) {
+        return null;
+    }
+
+    @Override
+    public List<Streamer> search(String keyWord) {
         return null;
     }
 }

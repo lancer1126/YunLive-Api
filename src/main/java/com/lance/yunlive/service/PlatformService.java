@@ -2,6 +2,7 @@ package com.lance.yunlive.service;
 
 import com.lance.yunlive.domain.LiveQuality;
 import com.lance.yunlive.domain.LiveRoom;
+import com.lance.yunlive.domain.Streamer;
 
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
@@ -27,4 +28,14 @@ public interface PlatformService {
      * 获取每个画质的真实地址
      */
     LiveQuality getRealUrl(String platform, String roomId);
+
+    /**
+     * 根据平台以及关键字查询主播
+     */
+    List<Streamer> search(String platform, String keyWord);
+
+    /**
+     * 异步根据平台名以及关键字查询主播
+     */
+    CompletableFuture<List<Streamer>> searchAsync(String platform, String keyWord);
 }

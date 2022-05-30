@@ -3,6 +3,7 @@ package com.lance.yunlive.common.api;
 import com.lance.yunlive.common.enums.Platform;
 import com.lance.yunlive.domain.LiveQuality;
 import com.lance.yunlive.domain.LiveRoom;
+import com.lance.yunlive.domain.Streamer;
 
 import java.util.List;
 
@@ -15,7 +16,6 @@ public interface ApiClient {
 
     /**
      * 获取String类型的平台名
-     * @return
      */
     String getPlatformName();
 
@@ -33,4 +33,9 @@ public interface ApiClient {
      * 根据roomId获取直播间每个画质的真是地址
      */
     LiveQuality getRealUrl(String roomId);
+
+    /**
+     * 根据关键字查询主播
+     */
+    List<Streamer> search(String keyWord);
 }

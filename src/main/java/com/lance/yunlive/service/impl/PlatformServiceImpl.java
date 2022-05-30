@@ -6,6 +6,7 @@ import com.lance.yunlive.common.exception.LiveCsrException;
 import com.lance.yunlive.config.ApiClientFactory;
 import com.lance.yunlive.domain.LiveQuality;
 import com.lance.yunlive.domain.LiveRoom;
+import com.lance.yunlive.domain.Streamer;
 import com.lance.yunlive.mapper.LiveRoomMapper;
 import com.lance.yunlive.service.PlatformService;
 import lombok.extern.slf4j.Slf4j;
@@ -58,6 +59,25 @@ public class PlatformServiceImpl implements PlatformService {
     public LiveQuality getRealUrl(String platform, String roomId) {
         ApiClient apiClient = checkClient(platform);
         return apiClient.getRealUrl(roomId);
+    }
+
+    @Override
+    public List<Streamer> search(String platform, String keyWord) {
+        return checkClient(platform).search(keyWord);
+    }
+
+    @Override
+    @Async("taskExecutor")
+    public CompletableFuture<List<Streamer>> searchAsync(String platform, String keyWord) {
+        log.info("平台: " + platform + "开始查询，查询内容： " + keyWord);
+        List<Streamer> streamerList = new ArrayList<>();
+        try {
+            streamerList.addAll(checkClient(platform).search(keyWord));
+        } catch (Exception e) {
+            log.warn("平台：" + platform + "搜索接口出错");
+        }
+        log.info("平台：" + platform + " 查询到 " + streamerList.size() + "条数据");
+        return CompletableFuture.completedFuture(streamerList);
     }
 
     public ApiClient checkClient(String platform) {

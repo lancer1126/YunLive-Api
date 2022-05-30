@@ -8,6 +8,7 @@ import com.lance.yunlive.common.constrants.ApiUrl;
 import com.lance.yunlive.common.enums.Platform;
 import com.lance.yunlive.domain.LiveQuality;
 import com.lance.yunlive.domain.LiveRoom;
+import com.lance.yunlive.domain.Streamer;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -66,6 +67,11 @@ public class HuyaApiService implements ApiClient {
 
     @Override
     public LiveQuality getRealUrl(String roomId) {
+        return null;
+    }
+
+    @Override
+    public List<Streamer> search(String keyWord) {
         return null;
     }
 }

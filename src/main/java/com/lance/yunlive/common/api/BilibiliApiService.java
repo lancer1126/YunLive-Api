@@ -13,6 +13,7 @@ import com.lance.yunlive.common.enums.BiliQuality;
 import com.lance.yunlive.common.enums.Platform;
 import com.lance.yunlive.domain.LiveQuality;
 import com.lance.yunlive.domain.LiveRoom;
+import com.lance.yunlive.domain.Streamer;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
@@ -149,6 +150,32 @@ public class BilibiliApiService implements ApiClient {
         return liveQuality;
     }
 
+    @Override
+    public List<Streamer> search(String keyWord) {
+        List<Streamer> streamerList = new ArrayList<>();
+        String url = String.format(ApiUrl.Bilibili.SEARCH, keyWord);
+        String content = HttpUtil.get(url);
+        JSONObject jsonObject = JSON.parseObject(content);
+        if (jsonObject.getInteger("code") == 0) {
+            JSONArray resArr = jsonObject.getJSONObject("data").getJSONArray("result");
+            for (int i = 0; i < resArr.size(); i++) {
+                JSONObject obj = resArr.getJSONObject(i);
+                Streamer streamer = new Streamer();
+                streamer.setPlatform(Platform.BILIBILI.name);
+                streamer.setNickName(parseUsername(obj.getString("uname")));
+                streamer.setCateName(obj.getString("cate_name"));
+                streamer.setHeadPic(obj.getString("uface"));
+                streamer.setRoomId(obj.getString("roomid"));
+                streamer.setIsLive(obj.getBoolean("is_live") ? "1" : "0");
+                streamer.setFollowers(obj.getInteger("attentions"));
+                streamerList.add(streamer);
+            }
+        } else {
+            log.error("查询内容为空，关键字: " + keyWord);
+        }
+        return streamerList;
+    }
+
     public JSONObject getRealRid(String rid) {
         String url = String.format(ApiUrl.Bilibili.ROOM_INIT, rid);
         String content = HttpRequest.get(url)
@@ -171,9 +198,10 @@ public class BilibiliApiService implements ApiClient {
 
     /**
      * 获取真实的播放地址
-     * @param roomId    房间Id
-     * @param qn        画质选项
-     * @return          地址
+     *
+     * @param roomId 房间Id
+     * @param qn     画质选项
+     * @return 地址
      */
     private String getPlayUrl(String roomId, String qn) {
         String url = String.format(ApiUrl.Bilibili.PLAY_URL, roomId, qn);
@@ -188,6 +216,14 @@ public class BilibiliApiService implements ApiClient {
             log.error("Bilibili---获取真实地址异常---roomId：" + roomId);
             return "获取失败";
         }
+    }
+
+    /**
+     * 查询内容中会包含css属性，需要去掉
+     */
+    private String parseUsername(String username) {
+        return username.replaceAll("<em class=\"keyword\">", "")
+                .replaceAll("</em>", "");
     }
 
 }

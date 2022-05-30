@@ -9,7 +9,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
-import java.util.List;
 
 @RestController
 @RequestMapping("/live")
@@ -46,5 +45,11 @@ public class LiveRoomController {
     public ResultEntity getRealUrl(@RequestParam("p") String platform,
                                    @RequestParam("rid") String roomId) {
         return ResultEntity.success(liveRoomService.getRealUrl(platform, roomId));
+    }
+
+    @GetMapping("/search")
+    public ResultEntity search(@RequestParam("p") String platform,
+                               @RequestParam("kw") String keyWord) {
+        return ResultEntity.success(liveRoomService.search(platform, keyWord));
     }
 }

@@ -2,6 +2,7 @@ package com.lance.yunlive.service;
 
 import com.lance.yunlive.domain.LiveRoom;
 import com.lance.yunlive.domain.LiveQuality;
+import com.lance.yunlive.domain.Streamer;
 
 import java.util.List;
 
@@ -20,4 +21,6 @@ public interface LiveRoomService {
     LiveRoom getRoomInfo(String uid, String platform, String roomId);
 
     LiveQuality getRealUrl(String platform, String roomId);
+
+    List<Streamer> search(String platform, String keyWord);
 }

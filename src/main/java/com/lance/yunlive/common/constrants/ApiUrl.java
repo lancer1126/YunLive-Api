@@ -9,6 +9,10 @@ public class ApiUrl {
                 + "&platform=h5&https_url_req=1&ptype=16"
                 + "&cid=%s"
                 + "&qn=%s";
+        public static final String SEARCH = "https://api.bilibili.com/x/web-interface/search/type?" +
+                "context=&search_type=live_user&cover_type=user_cover" +
+                "&page=1&order=&keyword=%s&category_id=&__refresh__=true" +
+                "&_extra=&highlight=1&single_column=0";
     }
 
     public static class Douyu {

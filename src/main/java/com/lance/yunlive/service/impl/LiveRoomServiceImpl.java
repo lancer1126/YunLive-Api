@@ -3,6 +3,7 @@ package com.lance.yunlive.service.impl;
 import com.lance.yunlive.common.enums.Platform;
 import com.lance.yunlive.domain.LiveQuality;
 import com.lance.yunlive.domain.LiveRoom;
+import com.lance.yunlive.domain.Streamer;
 import com.lance.yunlive.service.LiveRoomService;
 import com.lance.yunlive.service.PlatformService;
 import lombok.extern.slf4j.Slf4j;
@@ -62,5 +63,33 @@ public class LiveRoomServiceImpl implements LiveRoomService {
     @Override
     public LiveQuality getRealUrl(String platform, String roomId) {
         return platformService.getRealUrl(platform, roomId);
+    }
+
+    @Override
+    public List<Streamer> search(String platform, String keyWord) {
+        List<Streamer> streamerList = new ArrayList<>();
+        if ("all".equals(platform) || "".equals(platform)) {
+            // 查询所有平台，异步多线程查询
+            List<Platform> platformList = new ArrayList<>(Arrays.asList(Platform.values()));
+            List<CompletableFuture<List<Streamer>>> futures = platformList.stream()
+                    .map(p -> platformService.searchAsync(p.name, keyWord))
+                    .collect(Collectors.toList());
+            CompletableFuture.allOf(futures.toArray(new CompletableFuture[0])).join();
+
+            // 所有线程都执行完毕后聚合数据
+            for (CompletableFuture<List<Streamer>> res : futures) {
+                try {
+                    if (res.get() != null) {
+                        streamerList.addAll(res.get());
+                    }
+                } catch (Exception e) {
+                    log.error("聚合搜索查询结果错误");
+                }
+            }
+        } else {
+            // 在指定平台进行查询
+            streamerList.addAll(platformService.search(platform, keyWord));
+        }
+        return streamerList;
     }
 }
