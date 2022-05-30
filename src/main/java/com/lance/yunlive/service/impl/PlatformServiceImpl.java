@@ -2,6 +2,7 @@ package com.lance.yunlive.service.impl;
 
 import com.lance.yunlive.common.api.ApiClient;
 import com.lance.yunlive.common.enums.Platform;
+import com.lance.yunlive.common.exception.LiveCsrException;
 import com.lance.yunlive.config.ApiClientFactory;
 import com.lance.yunlive.domain.LiveQuality;
 import com.lance.yunlive.domain.LiveRoom;
@@ -41,33 +42,22 @@ public class PlatformServiceImpl implements PlatformService {
 
     @Override
     public List<LiveRoom> getRecByPlatform(String platform, int page, int size) {
-        ApiClient apiClient = checkClient(platform);
-        if (apiClient == null) {
-            return new ArrayList<>();
-        }
-        return apiClient.getRecommend(page, size);
+        return checkClient(platform).getRecommend(page, size);
     }
 
     @Override
     public LiveRoom getRoomInfo(String uid, String platform, String roomId) {
         ApiClient apiClient = checkClient(platform);
-        if (apiClient == null) {
-            return null;
-        }
-
         LiveRoom roomInfo = apiClient.getSingleRoomInfo(roomId);
         roomInfo.setIsFollowed(liveRoomMapper.checkFollowed(uid, platform, roomId));
+        log.info("roomInfo: " + roomInfo);
         return roomInfo;
     }
 
     @Override
     public LiveQuality getRealUrl(String platform, String roomId) {
-        LiveQuality quality = new LiveQuality();
         ApiClient apiClient = checkClient(platform);
-        if (apiClient != null) {
-            quality = apiClient.getRealUrl(roomId);
-        }
-        return quality;
+        return apiClient.getRealUrl(roomId);
     }
 
     public ApiClient checkClient(String platform) {
@@ -89,7 +79,11 @@ public class PlatformServiceImpl implements PlatformService {
                 platformEnum = Platform.EGAME;
                 break;
         }
-        if (platformEnum == null) return null;
-        return apiClientFactory.getApiType(platformEnum);
+
+        ApiClient apiType = apiClientFactory.getApiType(platformEnum);
+        if (apiType == null) {
+            throw new LiveCsrException("Platform does not exist!");
+        }
+        return apiType;
     }
 }
