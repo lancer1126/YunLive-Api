@@ -2,11 +2,12 @@ package com.lance.yunlive.service.impl;
 
 import com.lance.yunlive.common.api.ApiClient;
 import com.lance.yunlive.common.enums.Platform;
-import com.lance.yunlive.common.exception.LiveCsrException;
+import com.lance.yunlive.common.exception.LiveException;
 import com.lance.yunlive.config.ApiClientFactory;
-import com.lance.yunlive.domain.LiveQuality;
-import com.lance.yunlive.domain.LiveRoom;
-import com.lance.yunlive.domain.Streamer;
+import com.lance.yunlive.domain.vo.Area;
+import com.lance.yunlive.domain.vo.LiveQuality;
+import com.lance.yunlive.domain.vo.LiveRoom;
+import com.lance.yunlive.domain.vo.Streamer;
 import com.lance.yunlive.mapper.LiveRoomMapper;
 import com.lance.yunlive.service.PlatformService;
 import lombok.extern.slf4j.Slf4j;
@@ -80,6 +81,11 @@ public class PlatformServiceImpl implements PlatformService {
         return CompletableFuture.completedFuture(streamerList);
     }
 
+    @Override
+    public List<Area> getAreas(String platform) {
+        return checkClient(platform).getAreas();
+    }
+
     public ApiClient checkClient(String platform) {
         Platform platformEnum = null;
         switch (platform) {
@@ -102,7 +108,7 @@ public class PlatformServiceImpl implements PlatformService {
 
         ApiClient apiType = apiClientFactory.getApiType(platformEnum);
         if (apiType == null) {
-            throw new LiveCsrException("Platform does not exist!");
+            throw new LiveException("Platform does not exist!");
         }
         return apiType;
     }

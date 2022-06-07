@@ -1,4 +1,4 @@
-package com.lance.yunlive.domain;
+package com.lance.yunlive.domain.vo;
 
 import lombok.Data;
 

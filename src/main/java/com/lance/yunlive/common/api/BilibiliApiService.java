@@ -4,16 +4,17 @@ import cn.hutool.core.util.StrUtil;
 import cn.hutool.http.Header;
 import cn.hutool.http.HttpRequest;
 import cn.hutool.http.HttpUtil;
-import com.alibaba.fastjson.JSON;
-import com.alibaba.fastjson.JSONArray;
-import com.alibaba.fastjson.JSONObject;
+import com.alibaba.fastjson2.JSON;
+import com.alibaba.fastjson2.JSONArray;
+import com.alibaba.fastjson2.JSONObject;
 import com.lance.yunlive.common.constrants.ApiUrl;
 import com.lance.yunlive.common.constrants.HttpInfo;
 import com.lance.yunlive.common.enums.BiliQuality;
 import com.lance.yunlive.common.enums.Platform;
-import com.lance.yunlive.domain.LiveQuality;
-import com.lance.yunlive.domain.LiveRoom;
-import com.lance.yunlive.domain.Streamer;
+import com.lance.yunlive.domain.vo.Area;
+import com.lance.yunlive.domain.vo.LiveQuality;
+import com.lance.yunlive.domain.vo.LiveRoom;
+import com.lance.yunlive.domain.vo.Streamer;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
@@ -41,10 +42,8 @@ public class BilibiliApiService implements ApiClient {
     @Override
     public List<LiveRoom> getRecommend(int page, int size) {
         List<LiveRoom> liveRoomList = new ArrayList<>();
-
         String url = String.format(ApiUrl.Bilibili.RECOMMEND, page, size);
         String content = HttpUtil.get(url);
-//        String content = HttpClientUtil.doGet(url);
         if (StrUtil.isEmpty(content)) {
             log.warn("从bilibili获取的推荐内容为空");
             return liveRoomList;
@@ -174,6 +173,37 @@ public class BilibiliApiService implements ApiClient {
             log.error("查询内容为空，关键字: " + keyWord);
         }
         return streamerList;
+    }
+
+    @Override
+    public List<Area> getAreas() {
+        String url = ApiUrl.Bilibili.AREA;
+        String content = HttpUtil.get(url);
+
+        List<Area> areaList = new ArrayList<>();
+        try {
+            JSONObject jsonObject = JSON.parseObject(content);
+            JSONArray data = jsonObject.getJSONObject("data").getJSONArray("data");
+            for (int i = 0; i < data.size(); i++) {
+                JSONObject areaGroup = data.getJSONObject(i);
+                JSONArray areaInfo = areaGroup.getJSONArray("list");
+                for (int subIndex = 0; subIndex < areaInfo.size(); subIndex++) {
+                    JSONObject subArea = areaInfo.getJSONObject(subIndex);
+
+                    Area area = new Area()
+                            .setAreaType(subArea.getString("parent_id"))
+                            .setTypeName(subArea.getString("parent_name"))
+                            .setAreaId(subArea.getString("id"))
+                            .setAreaName(subArea.getString("name"))
+                            .setAreaPic(subArea.getString("pic"))
+                            .setPlatform(Platform.BILIBILI.name);
+                    areaList.add(area);
+                }
+            }
+        } catch (Exception e) {
+            log.error("获取Bilibili分类列表错误");
+        }
+        return areaList;
     }
 
     public JSONObject getRealRid(String rid) {

@@ -13,6 +13,7 @@ public class ApiUrl {
                 "context=&search_type=live_user&cover_type=user_cover" +
                 "&page=1&order=&keyword=%s&category_id=&__refresh__=true" +
                 "&_extra=&highlight=1&single_column=0";
+        public static final String AREA = "https://api.live.bilibili.com/xlive/web-interface/v1/index/getWebAreaList?source_id=2";
     }
 
     public static class Douyu {

@@ -1,9 +1,10 @@
 package com.lance.yunlive.common.api;
 
 import com.lance.yunlive.common.enums.Platform;
-import com.lance.yunlive.domain.LiveQuality;
-import com.lance.yunlive.domain.LiveRoom;
-import com.lance.yunlive.domain.Streamer;
+import com.lance.yunlive.domain.vo.Area;
+import com.lance.yunlive.domain.vo.LiveQuality;
+import com.lance.yunlive.domain.vo.LiveRoom;
+import com.lance.yunlive.domain.vo.Streamer;
 
 import java.util.List;
 
@@ -38,4 +39,9 @@ public interface ApiClient {
      * 根据关键字查询主播
      */
     List<Streamer> search(String keyWord);
+
+    /**
+     * 获取分类列表
+     */
+    List<Area> getAreas();
 }

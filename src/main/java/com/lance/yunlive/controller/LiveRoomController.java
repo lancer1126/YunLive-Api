@@ -1,7 +1,7 @@
 package com.lance.yunlive.controller;
 
 import com.lance.yunlive.common.ResultEntity;
-import com.lance.yunlive.domain.LiveRoom;
+import com.lance.yunlive.domain.vo.LiveRoom;
 import com.lance.yunlive.service.LiveRoomService;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -51,5 +51,10 @@ public class LiveRoomController {
     public ResultEntity search(@RequestParam("p") String platform,
                                @RequestParam("kw") String keyWord) {
         return ResultEntity.success(liveRoomService.search(platform, keyWord));
+    }
+
+    @GetMapping("/areas")
+    public ResultEntity getAreaByPlatform(@RequestParam("p") String platform) {
+        return ResultEntity.success(liveRoomService.getAreaByPlatform(platform));
     }
 }
