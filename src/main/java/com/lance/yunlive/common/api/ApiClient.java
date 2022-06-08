@@ -1,10 +1,7 @@
 package com.lance.yunlive.common.api;
 
 import com.lance.yunlive.common.enums.Platform;
-import com.lance.yunlive.domain.vo.Area;
-import com.lance.yunlive.domain.vo.LiveQuality;
-import com.lance.yunlive.domain.vo.LiveRoom;
-import com.lance.yunlive.domain.vo.Streamer;
+import com.lance.yunlive.domain.vo.*;
 
 import java.util.List;
 
@@ -43,5 +40,5 @@ public interface ApiClient {
     /**
      * 获取分类列表
      */
-    List<Area> getAreas();
+    List<AreaGroup> getAreas();
 }

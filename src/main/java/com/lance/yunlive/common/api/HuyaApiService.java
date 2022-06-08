@@ -6,10 +6,7 @@ import com.alibaba.fastjson2.JSONArray;
 import com.alibaba.fastjson2.JSONObject;
 import com.lance.yunlive.common.constrants.ApiUrl;
 import com.lance.yunlive.common.enums.Platform;
-import com.lance.yunlive.domain.vo.Area;
-import com.lance.yunlive.domain.vo.LiveQuality;
-import com.lance.yunlive.domain.vo.LiveRoom;
-import com.lance.yunlive.domain.vo.Streamer;
+import com.lance.yunlive.domain.vo.*;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -77,7 +74,7 @@ public class HuyaApiService implements ApiClient {
     }
 
     @Override
-    public List<Area> getAreas() {
+    public List<AreaGroup> getAreas() {
         return null;
     }
 }

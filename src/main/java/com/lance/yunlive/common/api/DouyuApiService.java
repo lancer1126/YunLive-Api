@@ -8,10 +8,7 @@ import com.lance.yunlive.common.constrants.ApiUrl;
 import com.lance.yunlive.common.constrants.Global;
 import com.lance.yunlive.common.enums.Platform;
 import com.lance.yunlive.common.utils.CommonUtil;
-import com.lance.yunlive.domain.vo.Area;
-import com.lance.yunlive.domain.vo.LiveQuality;
-import com.lance.yunlive.domain.vo.LiveRoom;
-import com.lance.yunlive.domain.vo.Streamer;
+import com.lance.yunlive.domain.vo.*;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
@@ -82,7 +79,7 @@ public class DouyuApiService implements ApiClient {
     }
 
     @Override
-    public List<Area> getAreas() {
+    public List<AreaGroup> getAreas() {
         return null;
     }
 }

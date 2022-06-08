@@ -1,10 +1,7 @@
 package com.lance.yunlive.service.impl;
 
 import com.lance.yunlive.common.enums.Platform;
-import com.lance.yunlive.domain.vo.Area;
-import com.lance.yunlive.domain.vo.LiveQuality;
-import com.lance.yunlive.domain.vo.LiveRoom;
-import com.lance.yunlive.domain.vo.Streamer;
+import com.lance.yunlive.domain.vo.*;
 import com.lance.yunlive.service.LiveRoomService;
 import com.lance.yunlive.service.PlatformService;
 import lombok.extern.slf4j.Slf4j;
@@ -95,7 +92,7 @@ public class LiveRoomServiceImpl implements LiveRoomService {
     }
 
     @Override
-    public List<Area> getAreaByPlatform(String platform) {
+    public List<AreaGroup> getAreaByPlatform(String platform) {
         return platformService.getAreas(platform);
     }
 }

@@ -1,9 +1,6 @@
 package com.lance.yunlive.service;
 
-import com.lance.yunlive.domain.vo.Area;
-import com.lance.yunlive.domain.vo.LiveQuality;
-import com.lance.yunlive.domain.vo.LiveRoom;
-import com.lance.yunlive.domain.vo.Streamer;
+import com.lance.yunlive.domain.vo.*;
 
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
@@ -43,5 +40,5 @@ public interface PlatformService {
     /**
      * 获取各个平台的分类列表
      */
-    List<Area> getAreas(String platform);
+    List<AreaGroup> getAreas(String platform);
 }

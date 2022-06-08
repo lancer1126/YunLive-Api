@@ -4,10 +4,7 @@ import com.lance.yunlive.common.api.ApiClient;
 import com.lance.yunlive.common.enums.Platform;
 import com.lance.yunlive.common.exception.LiveException;
 import com.lance.yunlive.config.ApiClientFactory;
-import com.lance.yunlive.domain.vo.Area;
-import com.lance.yunlive.domain.vo.LiveQuality;
-import com.lance.yunlive.domain.vo.LiveRoom;
-import com.lance.yunlive.domain.vo.Streamer;
+import com.lance.yunlive.domain.vo.*;
 import com.lance.yunlive.mapper.LiveRoomMapper;
 import com.lance.yunlive.service.PlatformService;
 import lombok.extern.slf4j.Slf4j;
@@ -82,7 +79,7 @@ public class PlatformServiceImpl implements PlatformService {
     }
 
     @Override
-    public List<Area> getAreas(String platform) {
+    public List<AreaGroup> getAreas(String platform) {
         return checkClient(platform).getAreas();
     }
 

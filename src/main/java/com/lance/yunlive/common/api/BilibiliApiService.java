@@ -11,10 +11,7 @@ import com.lance.yunlive.common.constrants.ApiUrl;
 import com.lance.yunlive.common.constrants.HttpInfo;
 import com.lance.yunlive.common.enums.BiliQuality;
 import com.lance.yunlive.common.enums.Platform;
-import com.lance.yunlive.domain.vo.Area;
-import com.lance.yunlive.domain.vo.LiveQuality;
-import com.lance.yunlive.domain.vo.LiveRoom;
-import com.lance.yunlive.domain.vo.Streamer;
+import com.lance.yunlive.domain.vo.*;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
@@ -176,34 +173,41 @@ public class BilibiliApiService implements ApiClient {
     }
 
     @Override
-    public List<Area> getAreas() {
+    public List<AreaGroup> getAreas() {
         String url = ApiUrl.Bilibili.AREA;
         String content = HttpUtil.get(url);
 
-        List<Area> areaList = new ArrayList<>();
+        List<AreaGroup> areaGroupList = new ArrayList<>();
         try {
             JSONObject jsonObject = JSON.parseObject(content);
             JSONArray data = jsonObject.getJSONObject("data").getJSONArray("data");
             for (int i = 0; i < data.size(); i++) {
-                JSONObject areaGroup = data.getJSONObject(i);
-                JSONArray areaInfo = areaGroup.getJSONArray("list");
+                JSONObject groupJson = data.getJSONObject(i);
+                List<Area> tempAreaList = new ArrayList<>();
+                JSONArray areaInfo = groupJson.getJSONArray("list");
                 for (int subIndex = 0; subIndex < areaInfo.size(); subIndex++) {
                     JSONObject subArea = areaInfo.getJSONObject(subIndex);
-
                     Area area = new Area()
-                            .setAreaType(subArea.getString("parent_id"))
-                            .setTypeName(subArea.getString("parent_name"))
+                            .setGroupId(groupJson.getString("id"))
+                            .setGroupName(groupJson.getString("name"))
                             .setAreaId(subArea.getString("id"))
+                            .setAreaType(subArea.getString("area_type"))
                             .setAreaName(subArea.getString("name"))
-                            .setAreaPic(subArea.getString("pic"))
-                            .setPlatform(Platform.BILIBILI.name);
-                    areaList.add(area);
+                            .setAreaPic(subArea.getString("pic"));
+                    tempAreaList.add(area);
                 }
+
+                AreaGroup areaGroup = new AreaGroup()
+                        .setGroupId(groupJson.getString("id"))
+                        .setGroupName(groupJson.getString("name"))
+                        .setPlatform(Platform.BILIBILI.name)
+                        .setAreaList(tempAreaList);
+                areaGroupList.add(areaGroup);
             }
         } catch (Exception e) {
             log.error("获取Bilibili分类列表错误");
         }
-        return areaList;
+        return areaGroupList;
     }
 
     public JSONObject getRealRid(String rid) {

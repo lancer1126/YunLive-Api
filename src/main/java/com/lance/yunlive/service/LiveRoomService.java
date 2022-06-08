@@ -1,9 +1,6 @@
 package com.lance.yunlive.service;
 
-import com.lance.yunlive.domain.vo.Area;
-import com.lance.yunlive.domain.vo.LiveRoom;
-import com.lance.yunlive.domain.vo.LiveQuality;
-import com.lance.yunlive.domain.vo.Streamer;
+import com.lance.yunlive.domain.vo.*;
 
 import java.util.List;
 
@@ -25,5 +22,5 @@ public interface LiveRoomService {
 
     List<Streamer> search(String platform, String keyWord);
 
-    List<Area> getAreaByPlatform(String platform);
+    List<AreaGroup> getAreaByPlatform(String platform);
 }
