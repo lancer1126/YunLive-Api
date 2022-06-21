@@ -95,4 +95,17 @@ public class LiveRoomServiceImpl implements LiveRoomService {
     public List<AreaGroup> getAreaByPlatform(String platform) {
         return platformService.getAreas(platform);
     }
+
+    @Override
+    public List<LiveRoom> getRecByGroup(String platform, String groupId, int page) {
+        return platformService.getRecByGroupOrArea(platform, new Area().setGroupId(groupId), page);
+    }
+
+    @Override
+    public List<LiveRoom> getRecByArea(String platform, String groupId, String areaId, int page) {
+        Area area = new Area()
+                .setGroupId(groupId)
+                .setAreaId(areaId);
+        return platformService.getRecByGroupOrArea(platform, area, page);
+    }
 }

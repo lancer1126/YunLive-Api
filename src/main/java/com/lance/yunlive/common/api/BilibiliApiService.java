@@ -11,6 +11,7 @@ import com.lance.yunlive.common.constrants.ApiUrl;
 import com.lance.yunlive.common.constrants.HttpInfo;
 import com.lance.yunlive.common.enums.BiliQuality;
 import com.lance.yunlive.common.enums.Platform;
+import com.lance.yunlive.common.exception.LiveException;
 import com.lance.yunlive.domain.vo.*;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -18,6 +19,7 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 
 @Slf4j
 @Service
@@ -208,6 +210,45 @@ public class BilibiliApiService implements ApiClient {
             log.error("获取Bilibili分类列表错误");
         }
         return areaGroupList;
+    }
+
+    @Override
+    public List<LiveRoom> getRecByGroupOrArea(Area area, int page) {
+        List<LiveRoom> liveRoomList = new ArrayList<>();
+        if (StrUtil.isEmpty(area.getGroupId())) {
+            throw new LiveException("Group为空");
+        }
+        if (StrUtil.isEmpty(area.getAreaId())) {
+            area.setAreaId("");
+        }
+        String url = String.format(ApiUrl.Bilibili.GROUP_AREA, area.getGroupId(), area.getAreaId(), page);
+        String content = HttpUtil.get(url);
+
+        try {
+            JSONObject resJson = JSON.parseObject(content);
+            if (resJson.getInteger("code") == 0) {
+                JSONArray dataArr = resJson.getJSONObject("data").getJSONArray("list");
+                for (Object obj : dataArr) {
+                    JSONObject item = (JSONObject) obj;
+
+                    LiveRoom liveRoom = new LiveRoom()
+                            .setPlatform(Platform.BILIBILI.name)
+                            .setRoomId(item.getString("roomid"))
+                            .setCategoryId(item.getString("area_id"))
+                            .setCategoryName(item.getString("area_name"))
+                            .setRoomName(item.getString("title"))
+                            .setOwnerName(item.getString("uname"))
+                            .setRoomPic(item.getString("cover"))
+                            .setOwnerHeadPic(item.getString("face"))
+                            .setOnline(item.getInteger("online"))
+                            .setIsLive(1);
+                    liveRoomList.add(liveRoom);
+                }
+            }
+        } catch (Exception e) {
+            log.error("根据Group和Area获取推荐内容错误");
+        }
+        return liveRoomList;
     }
 
     public JSONObject getRealRid(String rid) {

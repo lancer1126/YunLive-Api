@@ -82,4 +82,9 @@ public class DouyuApiService implements ApiClient {
     public List<AreaGroup> getAreas() {
         return null;
     }
+
+    @Override
+    public List<LiveRoom> getRecByGroupOrArea(Area area, int page) {
+        return null;
+    }
 }

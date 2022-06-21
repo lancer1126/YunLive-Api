@@ -23,4 +23,11 @@ public interface LiveRoomService {
     List<Streamer> search(String platform, String keyWord);
 
     List<AreaGroup> getAreaByPlatform(String platform);
+
+    /**
+     * 根据平台以及groupId获取推荐的直播间列表
+     */
+    List<LiveRoom> getRecByGroup(String platform, String groupId, int page);
+
+    List<LiveRoom> getRecByArea(String platform, String groupId, String areaId, int page);
 }

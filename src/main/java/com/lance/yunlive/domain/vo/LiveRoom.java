@@ -1,8 +1,10 @@
 package com.lance.yunlive.domain.vo;
 
 import lombok.Data;
+import lombok.experimental.Accessors;
 
 @Data
+@Accessors(chain = true)
 public class LiveRoom {
     private String platform;
     private String roomId;

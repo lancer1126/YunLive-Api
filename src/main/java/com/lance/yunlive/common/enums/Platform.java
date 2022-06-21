@@ -3,9 +3,7 @@ package com.lance.yunlive.common.enums;
 public enum Platform {
     BILIBILI("bilibili"),
     DOUYU("douyu"),
-    HUYA("huya"),
-    CC("cc"),
-    EGAME("egame");
+    HUYA("huya");
 
     public final String name;
     Platform(String name){

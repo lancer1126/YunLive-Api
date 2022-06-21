@@ -80,7 +80,17 @@ public class PlatformServiceImpl implements PlatformService {
 
     @Override
     public List<AreaGroup> getAreas(String platform) {
-        return checkClient(platform).getAreas();
+        List<AreaGroup> areaGroups = checkClient(platform).getAreas();
+        AreaGroup allGroup = new AreaGroup()
+                .setGroupName("全部");
+        // 手动添加 全部 这一栏
+        areaGroups.add(0, allGroup);
+        return areaGroups;
+    }
+
+    @Override
+    public List<LiveRoom> getRecByGroupOrArea(String platform, Area area, int page) {
+        return checkClient(platform).getRecByGroupOrArea(area, page);
     }
 
     public ApiClient checkClient(String platform) {
@@ -94,12 +104,6 @@ public class PlatformServiceImpl implements PlatformService {
                 break;
             case "huya":
                 platformEnum = Platform.HUYA;
-                break;
-            case "cc":
-                platformEnum = Platform.CC;
-                break;
-            case "egame":
-                platformEnum = Platform.EGAME;
                 break;
         }
 

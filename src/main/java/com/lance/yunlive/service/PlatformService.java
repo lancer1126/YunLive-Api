@@ -41,4 +41,9 @@ public interface PlatformService {
      * 获取各个平台的分类列表
      */
     List<AreaGroup> getAreas(String platform);
+
+    /**
+     * 根据平台以及groupId获取推荐的直播间列表
+     */
+    List<LiveRoom> getRecByGroupOrArea(String platform, Area area, int page);
 }

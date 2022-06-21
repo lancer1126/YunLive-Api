@@ -41,4 +41,9 @@ public interface ApiClient {
      * 获取分类列表
      */
     List<AreaGroup> getAreas();
+
+    /**
+     * 根据Area信息查找直播间列表
+     */
+    List<LiveRoom> getRecByGroupOrArea(Area area, int page);
 }

@@ -24,7 +24,7 @@ public class LiveRoomController {
     }
 
     @GetMapping("/recByPlatform")
-    public ResultEntity getRecByPlatform(@RequestParam("pl") String platform,
+    public ResultEntity getRecByPlatform(@RequestParam("p") String platform,
                                          @RequestParam(value = "page", defaultValue = "1") int page,
                                          @RequestParam(value = "size", defaultValue = "10") int size) {
         return ResultEntity.success(liveRoomService.getRecommendByPlatform(platform, page, size));
@@ -56,5 +56,20 @@ public class LiveRoomController {
     @GetMapping("/areas")
     public ResultEntity getAreaByPlatform(@RequestParam("p") String platform) {
         return ResultEntity.success(liveRoomService.getAreaByPlatform(platform));
+    }
+
+    @GetMapping("/recByGroup")
+    public ResultEntity getRecByGroup(@RequestParam("p") String platform,
+                                      @RequestParam("grpId") String groupId,
+                                      @RequestParam("page") int page) {
+        return ResultEntity.success(liveRoomService.getRecByGroup(platform, groupId, page));
+    }
+
+    @GetMapping("/recByArea")
+    public ResultEntity getRecByArea(@RequestParam("p") String platform,
+                                     @RequestParam("grpId") String groupId,
+                                     @RequestParam("areaId") String areaId,
+                                     @RequestParam("page") int page) {
+        return ResultEntity.success(liveRoomService.getRecByArea(platform, groupId, areaId, page));
     }
 }

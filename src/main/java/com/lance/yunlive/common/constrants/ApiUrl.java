@@ -14,10 +14,16 @@ public class ApiUrl {
                 "&page=1&order=&keyword=%s&category_id=&__refresh__=true" +
                 "&_extra=&highlight=1&single_column=0";
         public static final String AREA = "https://api.live.bilibili.com/xlive/web-interface/v1/index/getWebAreaList?source_id=2";
+        public static final String GROUP_AREA = "https://api.live.bilibili.com/xlive/web-interface/v1/second/getList?" +
+                "platform=web" +
+                "&parent_area_id=%s" +
+                "&area_id=%s" +
+                "&page=%s";
     }
 
     public static class Douyu {
         public static final String RECOMMEND = "https://m.douyu.com/api/room/list?page=%s&type=%s";
+        public static final String ROOM_INFO = "http://open.douyucdn.cn/api/RoomApi/room/";
     }
 
     public static class Huya {
