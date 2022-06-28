@@ -65,10 +65,10 @@ public class LiveRoomController {
         return ResultEntity.success(liveRoomService.getRecByGroup(platform, groupId, page));
     }
 
-    @GetMapping("/recByArea")
+    @GetMapping("/recByGrpArea")
     public ResultEntity getRecByArea(@RequestParam("p") String platform,
                                      @RequestParam("grpId") String groupId,
-                                     @RequestParam("areaId") String areaId,
+                                     @RequestParam(value = "areaId", required = false) String areaId,
                                      @RequestParam("page") int page) {
         return ResultEntity.success(liveRoomService.getRecByArea(platform, groupId, areaId, page));
     }
